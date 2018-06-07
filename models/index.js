@@ -3,12 +3,6 @@ const path = require('path');
 // Load ORM
 const Sequelize = require('sequelize');
 
-
-// To use SQLite data base:
-//    DATABASE_URL = sqlite:quiz.sqlite
-// To use  Heroku Postgres data base:
-//    DATABASE_URL = postgres://user:passwd@host:port/database
-
 const url = process.env.DATABASE_URL || "sqlite:quiz.sqlite";
 
 const sequelize = new Sequelize(url);
@@ -26,6 +20,5 @@ sequelize.sync()
     console.log("Error creating the data base tables:", error);
     process.exit(1);
 });
-
 
 module.exports = sequelize;
