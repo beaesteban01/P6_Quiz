@@ -20,12 +20,17 @@ exports.load = (req, res, next, tipId) => {
 
 // POST /quizzes/:quizId/tips
 exports.create = (req, res, next) => {
- 
+
+
+    //autor
+    const authorId = req.session.user && req.session.user.id || 0;
     const tip = models.tip.build(
         {
             text: req.body.text,
-            quizId: req.quiz.id
+            quizId: req.quiz.id,
+            authorId: authorId
         });
+
 
     tip.save()
     .then(tip => {

@@ -14,7 +14,6 @@
     "reset_heroku": "heroku pg:reset DATABASE",
     "mon_heroku": "heroku maintenance:on",
     "moff_heroku": "heroku maintenance:off"
- 
   },
   "engines": {
     "node": "8.9.1",
