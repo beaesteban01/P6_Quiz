@@ -5,6 +5,7 @@
   "scripts": {
     "start_old": "heroku local:start",
     "super": "supervisor ./bin/www",
+<<<<<<< HEAD
     "start": "node ./bin/www",
     "migrate_local": "sequelize db:migrate --url sqlite://$(pwd)/quiz.sqlite",
     "seed_local": "sequelize db:seed:all --url sqlite://$(pwd)/quiz.sqlite",
@@ -14,6 +15,9 @@
     "reset_heroku": "heroku pg:reset DATABASE",
     "mon_heroku": "heroku maintenance:on",
     "moff_heroku": "heroku maintenance:off"
+=======
+    "start": "node ./bin/www"
+>>>>>>> practica6
   },
   "engines": {
     "node": "8.9.1",

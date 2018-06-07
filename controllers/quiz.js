@@ -225,3 +225,62 @@ exports.check = (req, res, next) => {
         answer
     });
 };
+
+
+//GET /quizzes/randomplay
+exports.randomplay = (req, res, next) => {
+
+    if(req.session.randomplay===undefined)          //array de IDs
+        req.session.randomplay=[];
+
+
+    var condition1 = {"id": {[Sequelize.Op.notIn]: req.session.randomplay}};        //excluyo los ID que ya respondi
+
+    /*CASO QUE SE ME ACABAN LOS QUIZZES*/
+    return models.quiz.count({where: condition1}) //Cuento los ids que quedan del arrays
+        .then(rest => {
+            if(rest === 0){
+            var puntuacion = req.session.randomplay.length;
+            req.session.randomplay = [];        //elimino la sesion
+            res.render('quizzes/random_nomore', {score: puntuacion});   //renderizo pantalla final con puntuacion
+        }
+        randomId = Math.floor(Math.random() * rest);        //ID aleatoria
+        return models.quiz.findAll({where: condition1, limit:1, offset: randomId})    //limito busqueda a
+                                                                                    //quiz que no he respondido
+                                                                                    //ID igual al random
+                                                                                    //limito a coger solo 1 quiz
+            .then(quiz => {
+            return quiz[0];
+            })
+        })
+        /*CASO QUE SIGO JUGANDO*/
+        .then(quiz1 => {
+            var puntuacion = req.session.randomplay.length;
+            res.render('quizzes/random_play', {quiz: quiz1, score: puntuacion});    //renderizo pantalla juego con pregunta aleatoria
+        })
+        .catch(err => {
+                console.log(err);
+        })
+
+};
+
+//GET /quizzes/randomcheck
+exports.randomcheck = (req, res, next) => {
+
+    const {quiz, query} = req;
+
+    const answer = query.answer || "";
+    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
+    const quizId = quiz.id;
+
+    if(result){     //si es correcto, guardo el ID acertado en session, incremento puntuacion y renderizo pantalla de resultado
+        req.session.randomplay.push(quizId);
+        var puntuacion = req.session.randomplay.length;
+        res.render('quizzes/random_result', {score: puntuacion, answer, result});
+    }
+    else{       //si no es correcto, compruebo la puntuacion actual y renderizo la pantalla de resultado
+        var puntuacion = req.session.randomplay.length;
+        //nuevo = 1;
+        res.render('quizzes/random_result', {score: puntuacion, answer, result})
+    }
+};
