@@ -26,6 +26,22 @@
 
                 <% } %>
 
+
+                <% if (isAdmin || isQuizAuthor) { %>
+
+                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?/edit?_method=DELETE">
+                    <button>Edit</button>
+                </a>
+
+                <% } %>
+
+                <% if (isAdmin || isQuizAuthor) { %>
+
+                <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
+                    <button>Delete</button>
+                </a>
+
+                <% } %>
                 <% if (isAdmin || isQuizAuthor) { %>
 
                     <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
